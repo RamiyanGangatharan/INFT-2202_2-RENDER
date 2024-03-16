@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const server = http.createServer((request, response) =>
 {
     let path = request.url as string;
-    if (path === "/" || path === "/home") { path = "/index.html"; }
+    if (path === "/" || path === "/home" || path === "") { path = "/index.html"; }
 
     let mime_type = lookup(path.substring(1));
     fs.readFile(__dirname + path, function (err, data)

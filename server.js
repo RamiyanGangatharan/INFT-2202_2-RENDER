@@ -10,7 +10,7 @@ let lookup = mime_types_1.default.lookup;
 const port = process.env.PORT || 3000;
 const server = http_1.default.createServer((request, response) => {
     let path = request.url;
-    if (path === "/" || path === "/home") {
+    if (path === "/" || path === "/home" || path === "") {
         path = "/index.html";
     }
     let mime_type = lookup(path.substring(1));

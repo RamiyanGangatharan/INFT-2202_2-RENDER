@@ -6,7 +6,6 @@
     /**
      *
      * @param link
-     * @param data
      * @constructor
      */
 
@@ -16,7 +15,6 @@
         linkQuery.off("click");
         linkQuery.off("mouseover");
         linkQuery.off("mouseout");
-
         linkQuery.css("text-decoration", "underline");
         linkQuery.css("color", "blue");
 
@@ -44,17 +42,14 @@
         });
     }
 
-
-
-
-    function LoadLink(link:string, data:string = "")
+    function LoadLink(link:string, data:string = ""):void
     {
         router.ActiveLink = link;
         AuthGuard();
         router.LinkData = data;
         history.pushState({}, "", router.ActiveLink);
         document.title = CapitalizeFirstLetter(router.ActiveLink)
-        $("iul>il>a").each(function (){$(this).removeClass("active")});
+        $("ul>li>a").each(function (){$(this).removeClass("active")});
         $(`il>a>:contains(${document.title})`).addClass("active");
         LoadContent();
     }
@@ -80,7 +75,7 @@
         $("#logout").on("click", function () {
 
             sessionStorage.clear();
-            location.href = "login.html";
+            LoadLink("login");
         });
     }
 
@@ -152,7 +147,7 @@
         console.log("Called DisplayHomePage()");
 
         $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
+            LoadLink("about")
         });
 
         $("main").append(`<p id="MainParagraph" class="mt-3">This is the first Paragraph</p>`);
@@ -229,18 +224,18 @@
         }
 
         $("#addButton").on("click", () => {
-            location.href = "/edit#add";
+            LoadLink("edit#add");
         });
 
         $("button.delete").on("click", function () {
             if (confirm("Please confirm contact deletion")) {
                 localStorage.removeItem($(this).val() as string);
             }
-            location.href = "/contact-list";
+            LoadLink("contact-list");
         });
 
         $("button.edit").on("click", function () {
-            location.href = "/edit#" + $(this).val();
+            LoadLink("edit#" + $(this).val());
         });
     }
 
@@ -270,7 +265,7 @@
     }
 
     function LoadHeader() {
-        $.get("/views/component/header.html", function (html_data) {
+        $.get(".//views/components/header.html", function (html_data) {
 
             $("header").html(html_data);
             document.title = CapitalizeFirstLetter(router.ActiveLink);
@@ -287,14 +282,14 @@
     function LoadContent() {
         let page_name = router.ActiveLink;
         let callback = ActiveLinkCallback();
-        $.get(`/views/content/${page_name}.html`, function (html_data) {
+        $.get(`./views/content/${page_name}.html`, function (html_data) {
             $("main").html(html_data);
             callback();
         });
     }
 
     function LoadFooter() {
-        $.get("/views/components/footer.html", function (html_data) {
+        $.get("./views/components/footer.html", function (html_data) {
 
             $("footer").html(html_data);
         });
@@ -318,11 +313,11 @@
                     let contactNumber: string = document.forms[0].contactNumber.value;
                     let emailAddress: string = document.forms[0].emailAddress.value;
                     AddContact(fullName, contactNumber, emailAddress);
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
 
                 $("#ResetButton").on("click", () => {
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 break;
             default:
@@ -343,11 +338,11 @@
 
                     //replace the contact in localStorage
                     localStorage.setItem(page, contact.serialize() as string);
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
 
                 $("#ResetButton").on("click", () => {
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 break;
         }
@@ -381,7 +376,7 @@
                 if (success) {
                     sessionStorage.setItem("user", newUser.serialize() as string);
                     messageArea.removeAttr("class").hide();
-                    location.href = "contact-list.html";
+                    LoadLink("contact-list");
                 }
                 else {
                     $("#user").trigger("focus").trigger("select");
@@ -395,11 +390,8 @@
 
 
                     document.forms[0].reset();
-                    location.href = "/index";
+                    LoadLink("index");
                 });
-
-
-
             });
         });
     }

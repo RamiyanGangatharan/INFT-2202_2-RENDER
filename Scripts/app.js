@@ -30,7 +30,7 @@
         router.LinkData = data;
         history.pushState({}, "", router.ActiveLink);
         document.title = CapitalizeFirstLetter(router.ActiveLink);
-        $("iul>il>a").each(function () { $(this).removeClass("active"); });
+        $("ul>li>a").each(function () { $(this).removeClass("active"); });
         $(`il>a>:contains(${document.title})`).addClass("active");
         LoadContent();
     }
@@ -49,7 +49,7 @@
         }
         $("#logout").on("click", function () {
             sessionStorage.clear();
-            location.href = "login.html";
+            LoadLink("login");
         });
     }
     function ContactFormValidation() {
@@ -80,7 +80,7 @@
     function DisplayHomePage() {
         console.log("Called DisplayHomePage()");
         $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
+            LoadLink("about");
         });
         $("main").append(`<p id="MainParagraph" class="mt-3">This is the first Paragraph</p>`);
         $("body").append(`<article class="container"><p id="ArticleParagraph" class="mt-3">This is my article paragraph</p></article>`);
@@ -143,16 +143,16 @@
             contactList.innerHTML = data;
         }
         $("#addButton").on("click", () => {
-            location.href = "/edit#add";
+            LoadLink("edit#add");
         });
         $("button.delete").on("click", function () {
             if (confirm("Please confirm contact deletion")) {
                 localStorage.removeItem($(this).val());
             }
-            location.href = "/contact-list";
+            LoadLink("contact-list");
         });
         $("button.edit").on("click", function () {
-            location.href = "/edit#" + $(this).val();
+            LoadLink("edit#" + $(this).val());
         });
     }
     function Display404Page() {
@@ -180,7 +180,7 @@
         }
     }
     function LoadHeader() {
-        $.get("/views/component/header.html", function (html_data) {
+        $.get(".//views/components/header.html", function (html_data) {
             $("header").html(html_data);
             document.title = CapitalizeFirstLetter(router.ActiveLink);
             $(`li>a:contains(${document.title})`).addClass("active").attr("aria-current", "page");
@@ -193,13 +193,13 @@
     function LoadContent() {
         let page_name = router.ActiveLink;
         let callback = ActiveLinkCallback();
-        $.get(`/views/content/${page_name}.html`, function (html_data) {
+        $.get(`./views/content/${page_name}.html`, function (html_data) {
             $("main").html(html_data);
             callback();
         });
     }
     function LoadFooter() {
-        $.get("/views/components/footer.html", function (html_data) {
+        $.get("./views/components/footer.html", function (html_data) {
             $("footer").html(html_data);
         });
     }
@@ -216,10 +216,10 @@
                     let contactNumber = document.forms[0].contactNumber.value;
                     let emailAddress = document.forms[0].emailAddress.value;
                     AddContact(fullName, contactNumber, emailAddress);
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 $("#ResetButton").on("click", () => {
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 break;
             default:
@@ -234,10 +234,10 @@
                     contact.contactNumber = $("#contactNumber").val();
                     contact.emailAddress = $("#emailAddress").val();
                     localStorage.setItem(page, contact.serialize());
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 $("#ResetButton").on("click", () => {
-                    location.href = "/contact-list";
+                    LoadLink("contact-list");
                 });
                 break;
         }
@@ -250,11 +250,11 @@
             let success = false;
             let newUser = new core.User();
             $.get("./data/users.json", function (data) {
-                for (const user of data.users) {
+                for (const user of data.user) {
                     console.log(data.user);
                     let username = document.forms[0].username.value;
                     let password = document.forms[0].password.value;
-                    if (username === user.Username && password === user.Password) {
+                    if (username === user.Username && password === user.password) {
                         newUser.fromJSON(user);
                         success = true;
                         break;
@@ -263,7 +263,7 @@
                 if (success) {
                     sessionStorage.setItem("user", newUser.serialize());
                     messageArea.removeAttr("class").hide();
-                    location.href = "contact-list.html";
+                    LoadLink("contact-list");
                 }
                 else {
                     $("#user").trigger("focus").trigger("select");
@@ -274,7 +274,7 @@
                 }
                 $("#cancelButton").on("click", function () {
                     document.forms[0].reset();
-                    location.href = "/index";
+                    LoadLink("index");
                 });
             });
         });
