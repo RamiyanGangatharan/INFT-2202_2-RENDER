@@ -1,11 +1,10 @@
 {
-  "compilerOptions":
-  {
-    "target": "ES2022",
+  "compilerOptions": {
     "module": "commonjs",
+    "target": "ES2022",
     "sourceMap": true,
     "removeComments": true,
-    "strict": true,
+    "strict" : true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -19,5 +18,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "Node"
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
